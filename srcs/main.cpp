@@ -31,6 +31,11 @@ void        gameLoop()
     if (!createMap(map))
         return ;
 
+    Entity      *entity;
+    entity = game.createEntity();
+
+    sf::Sprite      sp;
+
     /* Start the game loop */
     while (!game.quit)
     {
@@ -38,8 +43,9 @@ void        gameLoop()
         if (timeDiff(t0, t1) >= (MICRO_SEC / FPS))
         {
             win.clear();
-            game.eventManager();
+            win.eventManager();
             win.renderMap(map);
+            win.draw(*entity);
             win.display();
             t0 = t1;
         }

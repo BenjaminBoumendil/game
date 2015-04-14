@@ -39,14 +39,16 @@ void                GameRenderer::renderMap(Map map) {
 }
 
 void             GameRenderer::eventManager() {
+    using dispatcher_t = signals::literal::from<Inputs>;
     sf::Event   event;
 
     while (pollEvent(event))
     {
         if (event.type == sf::Event::Closed) {
             close();
+            dispatcher_t::emit<Inputs::close>();
         }
-        else if (event.type == sf::Event::KeyPressed)
-            return event.key.code;
+        // else if (event.type == sf::Event::KeyPressed)
+            // return event.key.code;
     }
 }

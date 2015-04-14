@@ -9,6 +9,7 @@ SFML_LIBS			=		-lsfml-system -lsfml-graphics -lsfml-window -lsfml-audio
 
 COMPILER			=		clang++
 CFLAGS				=		-g3 -O3 -Wall -Wextra -c -Isrcs -I $(INCLUDE_DIR)\
+							-I $(SIGNALS_DIR)\
 							-I sfml/includes\
 							-std=c++1y\
 							-I $(SFML_PATH)/include
@@ -18,6 +19,7 @@ LFLAGS				=		-L $(SFML_PATH)/lib $(SFML_LIBS)\
 SRC					=		$(call rwildcard,srcs,*.cpp)
 
 INCLUDE_DIR			=		includes
+SIGNALS_DIR			=		signals/signals
 
 OBJ_DIR				=		objs
 OBJ					=		$(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))

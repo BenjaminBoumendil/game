@@ -1,8 +1,10 @@
 #include "Entity.hpp"
 
-Entity::Entity() { }
+Entity::Entity(): sf::Sprite() { }
 
-Entity::Entity(const Entity & other) { (void)other; }
+Entity::Entity(const Entity & other): sf::Sprite() {
+    (void)other;
+}
 
 Entity::~Entity() { }
 
