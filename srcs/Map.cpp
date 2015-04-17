@@ -1,49 +1,39 @@
 #include "Map.hpp"
 
-Map::Map() { }
-
-Map::Map(const int x, const int y): map(), mapX(x), mapY(y) {
-    sf::RectangleShape      rec(sf::Vector2f(WIN_WIDTH / x, WIN_HEIGHT / y));
+Map::Map(const int x, const int y): textures({
+    { "wallRight", Texture("tex/Rendered Textures/Walls/Wall 1 NE.png") },
+    { "wallLeft" , Texture("tex/Rendered Textures/Walls/Wall 1 NW.png") },
+    { "wallUp"   , Texture("tex/Rendered Textures/Walls/Wall 2 NW.png") },
+    { "wallDown" , Texture("tex/Rendered Textures/Walls/Wall 2 NE.png") },}
+), mapX(x), mapY(y)
+{
+    MapNode     *rec;
 
     for (int i = 0; i < y; i++) {
         for (int c = 0; c < x; c++) {
-            rec.setPosition(c * WIN_WIDTH / x, i * WIN_HEIGHT / y);
-            rec.setOutlineThickness(1);
-            rec.setOutlineColor(sf::Color::Red);
-            rec.setFillColor(sf::Color(0, 184, 245));
-            map.push_back(rec);
+            rec = new MapNode(sf::Vector2f(WIN_WIDTH / x, WIN_HEIGHT / y));
+            rec->setPosition(c * WIN_WIDTH / x, i * WIN_HEIGHT / y);
+            rec->setOutlineThickness(1);
+            rec->setOutlineColor(sf::Color::Red);
+            rec->setFillColor(sf::Color::Black);
+            map.emplace_back(rec);
         }
     }
-}
-
-Map::Map(const Map & other) {
-    map = other.map;
-    mapX = other.mapX;
-    mapY = other.mapY;
-    floorTex = other.floorTex;
-}
-
-Map::~Map() { }
-
-Map         &Map::operator=(const Map & rhs) {
-    if (this != &rhs) {
-        map = rhs.map;
-        mapX = rhs.mapX;
-        mapY = rhs.mapY;
-        floorTex = rhs.floorTex;
-    }
-    return *this;
+    addFloor();
 }
 
 void        Map::addFloor() {
-    std::list<sf::RectangleShape>::iterator     it = map.begin();
-
-    while (it != map.end())
+    for (auto & node:map)
     {
-        if (it->getPosition().y == ((mapY - 1) * WIN_HEIGHT / mapY)) {
-            it->setFillColor(sf::Color::White);
-            it->setTexture(&floorTex);
+        if (node->getPosition().y == ((mapY - 1) * WIN_HEIGHT / mapY)) {
+            node->setFillColor(sf::Color::White);
+            if (node->getPosition().x == 0)
+                node->setTexture(&textures["wallLeft"]);
+            else if (node->getPosition().x == ((mapX - 1) * WIN_WIDTH / mapX))
+                node->setTexture(&textures["wallRight"]);
+            else
+                node->setTexture(&textures["wallUp"]);
+            node->collider = true;
         }
-        it++;
     }
 }

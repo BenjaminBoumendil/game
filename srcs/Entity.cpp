@@ -1,15 +1,16 @@
 #include "Entity.hpp"
 
-Entity::Entity(): sf::Sprite() { }
+Entity::Entity(const std::string & path): sf::Sprite(), tex(new Texture(path)) { }
 
-Entity::Entity(const Entity & other): sf::Sprite() {
-    (void)other;
+void            Entity::update(const Map & map) {
+    applyGravity(map);
 }
 
-Entity::~Entity() { }
+sf::Vector2f    Entity::moveToCollision(const int offsetX, const int offsetY,
+                                        const Map & map) {
+    return sf::Vector2f(offsetX, offsetY);
+}
 
-Entity      &Entity::operator=(const Entity & rhs) {
-    if (this != &rhs) {
-    }
-    return *this;
+void            Entity::applyGravity(const Map & map) {
+    move(moveToCollision(0, GRAVITY, map));
 }

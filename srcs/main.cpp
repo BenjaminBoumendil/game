@@ -1,4 +1,9 @@
 #include "pl.hpp"
+#include "GameEngine.hpp"
+#include "Map.hpp"
+#include "GameRenderer.hpp"
+#include "Entity.hpp"
+#include "Player.hpp"
 
 typedef struct timeval timeval_t;
 
@@ -6,35 +11,22 @@ static int timeDiff(timeval_t t0, timeval_t t1) {
     return (t1.tv_usec - t0.tv_usec) + (t1.tv_sec - t0.tv_sec) * MICRO_SEC;
 }
 
-bool        createMap(Map & map)
-{
-    if (!map.floorTex.loadFromFile("img/asphalt_clean_big.jpg")) {
-        std::cout << "Error loading texture" << std::endl;
-        return false;
-    }
-
-    map.addFloor();
-    return true;
-}
-
 void        gameLoop()
 {
     /* Init Game loop */
     GameEngine          game;
     GameRenderer        win{WIN_WIDTH, WIN_HEIGHT};
-    Map                 map{10, 10};
+    Map                 map{20, 20};
     timeval_t           t0, t1, tstart;
 
     gettimeofday(&tstart, 0);
     t0 = tstart;
 
-    if (!createMap(map))
-        return ;
+    // Entity      *entity;
+    // entity = game.createEntity();
 
-    Entity      *entity;
-    entity = game.createEntity();
-
-    sf::Sprite      sp;
+    Player      *player;
+    player = game.createPlayer();
 
     /* Start the game loop */
     while (!game.quit)
@@ -45,7 +37,8 @@ void        gameLoop()
             win.clear();
             win.eventManager();
             win.renderMap(map);
-            win.draw(*entity);
+            game.update(map);
+            win.draw(*player);
             win.display();
             t0 = t1;
         }

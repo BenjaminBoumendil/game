@@ -1,24 +1,31 @@
 #pragma once
 
 #include "pl.hpp"
-
-class Entity;
+#include "Entity.hpp"
+#include "Player.hpp"
 
 class GameEngine {
+
+using Entities = std::vector<std::unique_ptr<Entity>>;
 
 public:
     bool            quit;
 
     GameEngine();
-    ~GameEngine();
+    ~GameEngine() = default;
 
     void            eventManager();
     Entity          *createEntity();
+    Player          *createPlayer();
+    void            update(const Map & map);
 
 private:
-    GameEngine(const GameEngine & other);
+    int             gravity;
+    Entities        entities;
 
-    GameEngine      &operator=(const GameEngine & rhs);
+    GameEngine(const GameEngine & other) = default;
+
+    GameEngine      &operator=(const GameEngine & rhs) = default;
 
     void            signalsHandler();
 

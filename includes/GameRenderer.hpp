@@ -1,22 +1,21 @@
 #pragma once
 
 #include "pl.hpp"
-
-class Map;
+#include "Map.hpp"
 
 class GameRenderer: public sf::RenderWindow {
 
 public:
     GameRenderer(const int width, const int height);
-    ~GameRenderer();
+    ~GameRenderer() = default;
 
-    void                renderMap(Map map);
+    void                renderMap(Map & map);
     void                eventManager();
 
 private:
     GameRenderer();
-    GameRenderer(const GameRenderer & other);
+    GameRenderer(const GameRenderer & other) = default;
 
-    GameRenderer        &operator=(const GameRenderer & rhs);
+    GameRenderer        &operator=(const GameRenderer & rhs) = default;
 
 };

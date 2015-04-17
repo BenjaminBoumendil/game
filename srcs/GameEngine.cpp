@@ -4,15 +4,6 @@ GameEngine::GameEngine(): quit(false) {
     signalsHandler();
 }
 
-GameEngine::~GameEngine() {
-}
-
-GameEngine      &GameEngine::operator=(const GameEngine & rhs) {
-    if (this != &rhs) {
-    }
-    return *this;
-}
-
 void            GameEngine::signalsHandler() {
     using dispatcher_t = signals::literal::from<Inputs>;
 
@@ -22,15 +13,24 @@ void            GameEngine::signalsHandler() {
 }
 
 Entity          *GameEngine::createEntity() {
-    Entity      *entity = new Entity();
+    Entity      *entity = new Entity("img/Character/Walk/Right/1L cien.png");
 
-    if (!entity->tex.loadFromFile("img/Character/Walk/Right/1L cien.png")) {
-        std::cout << "Error loading texture" << std::endl;
-        return nullptr;
-    }
-
-    entity->setPosition(100, 100);
+    entity->setPosition(100, 1000);
     entity->setScale(1, 1);
-    entity->setTexture(entity->tex);
+    entity->setTexture(*entity->tex);
     return entity;
+}
+
+Player          *GameEngine::createPlayer() {
+    Player      *player = new Player("img/Character/Walk/Right/1L cien.png");
+
+    player->setPosition(100, 100);
+    player->setTexture(*player->tex);
+    entities.emplace_back(player);
+    return player;
+}
+
+void            GameEngine::update(const Map & map) {
+    for (auto & entity:entities)
+        entity->update(map);
 }

@@ -18,24 +18,9 @@ sf::RenderWindow::RenderWindow(sf::VideoMode(width, height),
 {
 }
 
-GameRenderer::GameRenderer(const GameRenderer & other) { (void)other; }
-
-GameRenderer::~GameRenderer() { }
-
-GameRenderer        &GameRenderer::operator=(const GameRenderer & rhs) {
-    if (this != &rhs) {
-    }
-    return *this;
-}
-
-void                GameRenderer::renderMap(Map map) {
-    std::list<sf::RectangleShape>::iterator   it = map.map.begin();
-
-    while (it != map.map.end())
-    {
-        draw(*it);
-        it++;
-    }
+void                GameRenderer::renderMap(Map & map) {
+    for (auto & node:map.map)
+        draw(*node);
 }
 
 void             GameRenderer::eventManager() {
@@ -48,7 +33,11 @@ void             GameRenderer::eventManager() {
             close();
             dispatcher_t::emit<Inputs::close>();
         }
-        // else if (event.type == sf::Event::KeyPressed)
-            // return event.key.code;
+        else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Left)
+                dispatcher_t::emit<Inputs::moveLeft>();
+            else if (event.key.code == sf::Keyboard::Right)
+                dispatcher_t::emit<Inputs::moveRight>();
+        }
     }
 }
